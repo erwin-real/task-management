@@ -34,20 +34,20 @@ class DatabaseSeeder extends Seeder
         $erwin = User::factory()->create([
             'name' => 'Erwin Capati',
             'email' => 'erwin@example.com',
-            'password' => bcrypt('john123')
+            'password' => bcrypt('erwin123')
         ]);
 
         $erwin->forceFill(['access_token' => $erwin->createToken('Personal Access Token')->plainTextToken])->save();
 
-        Task::factory(4)->create([
+        Task::factory(2)->create([
             'user_id' => $admin->id
         ]);
 
-        Task::factory(count: 8)->create([
+        Task::factory(count: 3)->create([
             'user_id' => $john->id
         ]);
 
-        Task::factory(count: 7)->create([
+        Task::factory(count: 4)->create([
             'user_id' => $erwin->id
         ]);
     }
