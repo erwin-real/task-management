@@ -24,7 +24,7 @@ class TaskController extends Controller
 
     public function index()
     {
-        return response()->json($this->taskService->getUserTasks());
+        return response()->json(['data' => $this->taskService->getUserTasks()]);
     }
 
     public function store(Request $request)
@@ -38,7 +38,7 @@ class TaskController extends Controller
             'user_id' => 'required|exists:users,id',
         ]);
 
-        return response()->json($this->taskService->createTask($data));
+        return response()->json($this->taskService->createTask($data), 201);
     }
 
     public function show($id)
@@ -51,8 +51,8 @@ class TaskController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'required|in:pending,completed',
-            'priority' => 'required|in:low,medium,high',
+            'status' => 'nullable|in:pending,completed',
+            'priority' => 'nullable|in:low,medium,high',
             'order' => 'nullable|integer',
         ]);
 
@@ -73,7 +73,7 @@ class TaskController extends Controller
 
         $this->taskService->reorderTasks($data['order']);
 
-        return response()->json(['message' => 'Task order updated']);
+        return response()->json(['message' => 'Tasks reordered successfully']);
     }
 
 }
