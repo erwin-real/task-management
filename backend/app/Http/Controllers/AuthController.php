@@ -30,6 +30,9 @@ class AuthController extends Controller
         if ($user->save()) {
             $token = $user->createToken('Personal Access Token')->plainTextToken;
 
+            $user->access_token = $token;
+            $user->save();
+
             return response()->json([
                 'message' => 'Successfully created user!',
                 'user' => new UserResource($user),
@@ -57,6 +60,8 @@ class AuthController extends Controller
 
         $user = $request->user();
         $token = $user->createToken('Personal Access Token')->plainTextToken;
+        $user->access_token = $token;
+        $user->save();
 
         return response()->json([
             'user' => new UserResource($user),

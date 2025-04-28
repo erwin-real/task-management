@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Task;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +14,41 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $admin = User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('admin123'),
+            'is_admin' => true
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $admin->forceFill(['access_token' => $admin->createToken('Personal Access Token')->plainTextToken])->save();
+
+        $john = User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => bcrypt('john123')
+        ]);
+
+        $john->forceFill(['access_token' => $john->createToken('Personal Access Token')->plainTextToken])->save();
+
+        $erwin = User::factory()->create([
+            'name' => 'Erwin Capati',
+            'email' => 'erwin@example.com',
+            'password' => bcrypt('john123')
+        ]);
+
+        $erwin->forceFill(['access_token' => $erwin->createToken('Personal Access Token')->plainTextToken])->save();
+
+        Task::factory(4)->create([
+            'user_id' => $admin->id
+        ]);
+
+        Task::factory(count: 8)->create([
+            'user_id' => $john->id
+        ]);
+
+        Task::factory(count: 7)->create([
+            'user_id' => $erwin->id
         ]);
     }
 }
